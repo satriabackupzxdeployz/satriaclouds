@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Home - SatriaClouds</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-spinner"></div>
+        <div style="color: #536471;">Memuat SatriaClouds...</div>
+    </div>
+
+    <div class="app-container" id="appContainer" style="display: none;">
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <div class="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
+                <div class="logo"><i class="fas fa-cloud"></i><span>SatriaClouds</span></div>
+            </div>
+            <div class="top-bar-right">
+                <div class="profile-btn" id="profileBtn" onclick="openProfileModal()"></div>
+            </div>
+        </div>
+
+        <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-cloud"></i>
+                <h2>SatriaClouds</h2>
+            </div>
+            <div class="sidebar-content">
+                <div class="user-card" onclick="openProfileModal()">
+                    <div class="user-avatar-large" id="sidebarAvatar"></div>
+                    <div class="user-info">
+                        <h3 id="sidebarName">-</h3>
+                        <p id="sidebarEmail">-</p>
+                    </div>
+                </div>
+                <div class="storage-card">
+                    <div class="storage-title"><i class="fas fa-database"></i><h4>Penyimpanan</h4></div>
+                    <div class="storage-bar"><div class="storage-used" style="width: 100%; background: linear-gradient(90deg, #1d9bf0, #10b981);"></div></div>
+                    <div class="storage-numbers"><span>Unlimited Storage</span><span>SatriaDev</span></div>
+                </div>
+                <div class="nav-item active" onclick="navigateTo('root')"><i class="fas fa-cloud"></i><span>Semua File</span></div>
+                <div class="menu-divider" style="margin: 16px 0;"></div>
+                <div class="nav-item" onclick="openAboutModal()"><i class="fas fa-info-circle"></i><span>About</span></div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="path-bar" id="pathBar"></div>
+            <div class="action-bar">
+                <button class="action-btn primary" onclick="openUploadModal()"><i class="fas fa-upload"></i><span>Upload</span></button>
+                <button class="action-btn" onclick="openNewFolderModal()"><i class="fas fa-folder-plus"></i><span>Folder Baru</span></button>
+                <button class="action-btn" onclick="moveSelected()"><i class="fas fa-arrows-alt"></i><span>Pindah</span></button>
+            </div>
+            <div class="files-grid" id="filesGrid"></div>
+        </div>
+    </div>
+
+    <div class="dropdown-menu" id="fileMenu">
+        <div class="menu-item" onclick="openFile()"><i class="fas fa-folder-open"></i><span>Buka</span></div>
+        <div class="menu-item" onclick="renameFile()"><i class="fas fa-edit"></i><span>Ubah Nama</span></div>
+        <div class="menu-item" onclick="downloadFile()"><i class="fas fa-download"></i><span>Download</span></div>
+        <div class="menu-divider"></div>
+        <div class="menu-item" onclick="moveFile()"><i class="fas fa-arrows-alt"></i><span>Pindah</span></div>
+        <div class="menu-item danger" onclick="deleteFile()"><i class="fas fa-trash"></i><span>Hapus</span></div>
+    </div>
+
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <h3>Profil Saya</h3>
+            <div class="upload-area" onclick="document.getElementById('profilePicInput').click()" style="padding: 20px;">
+                <i class="fas fa-camera"></i>
+                <p>Ubah Foto Profil</p>
+            </div>
+            <input type="file" id="profilePicInput" accept="image/*" style="display: none;" onchange="uploadProfilePic(this.files[0])">
+            <input type="text" id="profileName" readonly>
+            <input type="email" id="profileEmail" readonly>
+            <div class="modal-buttons">
+                <button class="modal-btn danger" onclick="logout()">Logout</button>
+                <button class="modal-btn cancel" onclick="closeModal('profileModal')">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="aboutModal">
+        <div class="modal-content" style="text-align: center;">
+            <i class="fas fa-cloud" style="font-size: 48px; color: #1d9bf0; margin-bottom: 16px;"></i>
+            <h3>SatriaClouds</h3>
+            <p style="color: #536471; margin-bottom: 24px; font-size: 14px;">Cloud storage modern dengan penyimpanan unlimited berbasis integrasi Telegram.</p>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <button onclick="window.open('https://whatsapp.com/channel/0029VbBO6h6LY6czYDJ3bc1I', '_blank')" style="background: #25D366; color: white; border: none; padding: 14px; border-radius: 40px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <i class="fab fa-whatsapp" style="font-size: 18px;"></i> Join my channel
+                </button>
+                <button onclick="window.open('https://saweria.co/satriadev', '_blank')" style="background: #FFD700; color: #0f1419; border: none; padding: 14px; border-radius: 40px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <i class="fas fa-coffee" style="font-size: 18px;"></i> Support
+                </button>
+            </div>
+            <div class="modal-buttons" style="margin-top: 24px; justify-content: center;">
+                <button class="modal-btn cancel" onclick="closeModal('aboutModal')">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="newFolderModal">
+        <div class="modal-content">
+            <h3>Buat Folder Baru</h3>
+            <input type="text" id="folderName" placeholder="Nama folder" value="Folder Baru">
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="closeModal('newFolderModal')">Batal</button>
+                <button class="modal-btn confirm" onclick="createFolder()">Buat</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="uploadModal">
+        <div class="modal-content">
+            <h3>Upload File</h3>
+            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Klik untuk pilih file</p>
+            </div>
+            <input type="file" id="fileInput" multiple style="display: none;" onchange="uploadFiles(this.files)">
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="closeModal('uploadModal')">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="moveModal">
+        <div class="modal-content">
+            <h3>Pindahkan ke</h3>
+            <div class="folder-list" id="folderList"></div>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="closeModal('moveModal')">Batal</button>
+                <button class="modal-btn confirm" onclick="confirmMove()">Pindah</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="renameModal">
+        <div class="modal-content">
+            <h3>Ubah Nama</h3>
+            <input type="text" id="renameInput" placeholder="Nama baru">
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="closeModal('renameModal')">Batal</button>
+                <button class="modal-btn confirm" onclick="confirmRename()">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="deleteModal">
+        <div class="modal-content">
+            <h3>Hapus File</h3>
+            <p style="color: #536471; margin-bottom: 24px;">Apakah Anda yakin ingin menghapus file ini?</p>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="closeModal('deleteModal')">Batal</button>
+                <button class="modal-btn danger" onclick="confirmDelete()">Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast" style="display: none;"></div>
+    <script src="/app.js"></script>
+</body>
+</html>
